@@ -6,8 +6,9 @@ import FormField from '../../components/FormField'
 import Button from '../../components/Button'
 import { Link } from 'expo-router'
 
-const SignIn = () => {
+const SignUp = () => {
   const [form, setForm] = useState({
+    username: '',
     email: '',
     password: ''
   })
@@ -26,9 +27,16 @@ const SignIn = () => {
             resizeMode='contain'
           />
           <Text className='text-2xl text-center text-white font-psemibold mt-3 mb-6'>
-            Log in to ShareAI
+            Sign up to ShareAI
           </Text>
 
+          <FormField
+            title='Username'
+            value={form.username}
+            handleChangeText={(e) => setForm({ ...form, username: e })}
+            styles='mt-6'
+            placeholder='Enter your Unique Username'
+          />
           <FormField
             title='Email'
             value={form.email}
@@ -46,7 +54,7 @@ const SignIn = () => {
           />
 
           <Button 
-            title='Sign In'
+            title='Sign Up'
             containerStyles='mt-6 w-full'
             textStyles='text-lg'
             handlePress={submitForm}
@@ -55,10 +63,10 @@ const SignIn = () => {
 
           <View className='flex-row items-center justify-center w-full gap-2 mt-6'>
             <Text className='text-gray-100 font-pmedium text-sm'>
-              Don't have an account?
+              Already have an account?
             </Text>
-            <Link href={'/sign-up'} className='text-secondary-200 font-pmedium ml-1 text-sm'>
-              SignUp
+            <Link href={'/sign-in'} className='text-secondary-200 font-pmedium ml-1 text-sm'>
+              SignIn
             </Link>
           </View>
         </View>
@@ -67,4 +75,4 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+export default SignUp

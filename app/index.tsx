@@ -1,7 +1,6 @@
 import { Image, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../constants';
-import { StatusBar } from 'expo-status-bar';
 import Button from '../components/Button';
 import { router } from 'expo-router';
 
@@ -39,7 +38,6 @@ export default function App() {
           />
         </View>
       </ScrollView>
-      <StatusBar backgroundColor='#161622' animated={true} style='light' />
     </SafeAreaView>
   );
 }
