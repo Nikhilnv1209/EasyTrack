@@ -1,4 +1,4 @@
-import { Account, Avatars, Client, Databases, ID, Models } from 'react-native-appwrite';
+import { Account, Avatars, Client, Databases, ID, Models, Query } from 'react-native-appwrite';
 
 export interface User extends Models.Document {
     accountId: string;
@@ -71,6 +71,29 @@ export const Signin = async (email: string, password: string): Promise<Models.Se
         return session;
     } catch (error: unknown) {
         console.error(error);
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error('An Unknown error occurred');
+        }
+    }
+}
+
+export const getCurrentUser = async (): Promise<User | null> => {
+    try {
+        const currentAccount = await account.get();
+        if (!currentAccount) throw Error;
+
+        const currentUser = await database.listDocuments(
+            config.databaseID,
+            config.userCollectionID,
+            [Query.equal('accountId', currentAccount.$id)]
+        )
+        if (!currentUser) throw Error;
+        return currentUser.documents[0] as User;
+
+    } catch (error: unknown) {
+        console.error("from appwrite",error);
         if (error instanceof Error) {
             throw new Error(error.message);
         } else {
