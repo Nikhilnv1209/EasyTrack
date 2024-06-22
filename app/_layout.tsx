@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { SplashScreen, Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
+import { GlobalProvider } from '../context/GlobalProvide';
 
 const RootLayout = () => {
     const [fontsLoaded, error] = useFonts({
@@ -29,6 +30,7 @@ const RootLayout = () => {
 
 
     return (
+      <GlobalProvider>
         <Stack screenOptions={{
           headerShown: false,
           statusBarColor: '#161622',
@@ -38,6 +40,7 @@ const RootLayout = () => {
             <Stack.Screen name="(auth)"/>
             <Stack.Screen name="(tabs)"/>
         </Stack>
+      </GlobalProvider>
     )
 }
 
