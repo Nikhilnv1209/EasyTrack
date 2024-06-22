@@ -1,4 +1,11 @@
-import { Account, Avatars, Client, Databases, ID } from 'react-native-appwrite';
+import { Account, Avatars, Client, Databases, ID, Models } from 'react-native-appwrite';
+
+export interface User extends Models.Document {
+    accountId: string;
+    username: string;
+    email: string;
+    avatar: string;
+}
 
 export const config = {
     endpoint: 'https://cloud.appwrite.io/v1',
@@ -24,7 +31,7 @@ const avatars = new Avatars(client);
 const database = new Databases(client);
 
 // Register User
-export const createUser = async (email: string, password: string, username: string) => {
+export const createUser = async (email: string, password: string, username: string): Promise<User> => {
     try {
         const newAccount = await account.create(ID.unique(), email, password, username);
 
@@ -35,7 +42,7 @@ export const createUser = async (email: string, password: string, username: stri
         const avatarUrl = avatars.getInitials(username);
         await Signin(email, password);
 
-        const newUser = await database.createDocument(
+        const newUser: User = await database.createDocument(
             config.databaseID,
             config.userCollectionID,
             ID.unique(),
@@ -58,9 +65,9 @@ export const createUser = async (email: string, password: string, username: stri
     }
 }
 
-export const Signin = async (email: string, password: string) => {
+export const Signin = async (email: string, password: string): Promise<Models.Session> => {
     try {
-        const session = await account.createEmailPasswordSession(email, password);
+        const session: Models.Session = await account.createEmailPasswordSession(email, password);
         return session;
     } catch (error: unknown) {
         console.error(error);
