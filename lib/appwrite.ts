@@ -1,4 +1,4 @@
-import { Account, Avatars, Client, Databases, ID, Models, Query } from 'react-native-appwrite';
+import { Account, AppwriteException, Avatars, Client, Databases, ID, Models, Query } from 'react-native-appwrite';
 
 export interface User extends Models.Document {
     accountId: string;
@@ -93,11 +93,14 @@ export const getCurrentUser = async (): Promise<User | null> => {
         return currentUser.documents[0] as User;
 
     } catch (error: unknown) {
-        console.error("from appwrite",error);
-        if (error instanceof Error) {
-            throw new Error(error.message);
-        } else {
+        if (error instanceof AppwriteException) {
+            if (error.code === 401) {
+                return null;
+            }
+        }
+        else {
             throw new Error('An Unknown error occurred');
         }
+        return null;
     }
 }
