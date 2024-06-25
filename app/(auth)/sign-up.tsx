@@ -29,7 +29,6 @@ const SignUp = () => {
       Alert.alert('Success', 'Account created successfully');
       router.replace('/home');
     } catch (error: unknown) {
-      console.error(error);
       if (error instanceof Error) {
         Alert.alert('Error', error.message);
       } else {

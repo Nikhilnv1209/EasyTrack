@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode, } from "react";
 import { User, getCurrentUser } from "../lib/appwrite";
+import { Alert } from "react-native";
 
 interface GlobalContextType {
     isLoggedIn: boolean;
@@ -37,9 +38,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         ).catch(
             (error: unknown) => {
                 if (error instanceof Error) {
-                    console.error("from context", error.message);
+                    Alert.alert('Error', error.message);
                 } else {
-                    console.error('An Unknown error occurred');
+                    Alert.alert('Error', 'An Unknown error occurred');
                 }
             }
         ).finally(

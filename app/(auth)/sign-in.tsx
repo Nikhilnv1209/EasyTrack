@@ -32,7 +32,6 @@ const SignIn = () => {
       Alert.alert('Success', 'Logged in successfully');
       router.replace('/home');
     } catch (error: unknown) {
-      console.error(error);
       if (error instanceof Error) {
         Alert.alert('Error', error.message);
       } else {
