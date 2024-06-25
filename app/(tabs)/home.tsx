@@ -4,6 +4,7 @@ import {
   FlatList,
   Image,
   RefreshControl,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,12 +12,44 @@ import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import EmptyState from "../../components/EmptyState";
+import { getAllPosts } from "../../lib/appwrite";
+import { Models } from "react-native-appwrite";
 
-export interface Post {
-  id: number;
+export interface Post extends Models.Document {
+  title: string;
+  thumbnail: string;
+  prompt: string;
+  videourl: string;
+  creator: string;
 }
 
 const Home = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isloading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+
+      try {
+        const allposts = await getAllPosts() as Post[];
+        setPosts(allposts);
+      } catch (error) {
+        if (error instanceof Error) {
+          Alert.alert("Error", error.message);
+        } else {
+          Alert.alert("Error", "An error occurred");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [])
+
+  console.log(posts);
+
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -29,8 +62,8 @@ const Home = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList<Post>
-        data={[{ id: 1 }, { id: 2 }]}
-        keyExtractor={(item) => item.id.toString()}
+        data={posts}
+        keyExtractor={(item) => item.$id.toString()}
         className="px-4"
         renderItem={({ item }) => (
           <Text className="text-xl text-white">{item.id}</Text>
@@ -64,7 +97,7 @@ const Home = () => {
                 <Text className="text-lg font-pregular text-gray-100">
                   Trending videos
                 </Text>
-                <Trending posts={[{ id: 1 }, { id: 2 }, { id: 3 }] ?? []} />
+                <Trending posts={posts ?? []} />
               </View>
 
             </View>

@@ -10,7 +10,7 @@ const Trending = ({ posts }: TrendingProps) => {
     return (
         <FlatList
             data={posts}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.$id.toString()}
             renderItem={({ item }) => (
                 <Text className='text-xl text-white'>{item.id}</Text>
             )}
