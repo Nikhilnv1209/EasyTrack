@@ -12,51 +12,17 @@ import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import EmptyState from "../../components/EmptyState";
+import useAppwrite, { Post } from "../../lib/useAppwrite";
 import { getAllPosts } from "../../lib/appwrite";
-import { Models } from "react-native-appwrite";
-
-export interface Post extends Models.Document {
-  title: string;
-  thumbnail: string;
-  prompt: string;
-  videourl: string;
-  creator: string;
-}
+import VideoCard from "../../components/VideoCard";
 
 const Home = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isloading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-
-      try {
-        const allposts = await getAllPosts() as Post[];
-        setPosts(allposts);
-      } catch (error) {
-        if (error instanceof Error) {
-          Alert.alert("Error", error.message);
-        } else {
-          Alert.alert("Error", "An error occurred");
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchData();
-  }, [])
-
-  console.log(posts);
-
   const [refreshing, setRefreshing] = useState(false);
-
+  const { posts, isloading, refetch } = useAppwrite(getAllPosts);
   const onRefresh = async () => {
     setRefreshing(true);
-
     // refresh data
-
+    await refetch();
     setRefreshing(false);
   };
   return (
@@ -66,7 +32,7 @@ const Home = () => {
         keyExtractor={(item) => item.$id.toString()}
         className="px-4"
         renderItem={({ item }) => (
-          <Text className="text-xl text-white">{item.id}</Text>
+          <VideoCard post={item}/>
         )}
         ListHeaderComponent={() => {
           return (

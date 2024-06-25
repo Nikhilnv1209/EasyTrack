@@ -1,6 +1,6 @@
 import { View, Text, FlatList } from 'react-native'
 import React from 'react'
-import { Post } from '../app/(tabs)/home'
+import { Post } from '../lib/useAppwrite'
 
 interface TrendingProps {
     posts: Array<Post>
