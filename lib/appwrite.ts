@@ -56,7 +56,6 @@ export const createUser = async (email: string, password: string, username: stri
 
         return newUser;
     } catch (error: unknown) {
-        console.error(error);
         if (error instanceof Error) {
             throw new Error(error.message);
         } else {
@@ -70,7 +69,6 @@ export const Signin = async (email: string, password: string): Promise<Models.Se
         const session: Models.Session = await account.createEmailPasswordSession(email, password);
         return session;
     } catch (error: unknown) {
-        console.error(error);
         if (error instanceof Error) {
             throw new Error(error.message);
         } else {
@@ -102,5 +100,21 @@ export const getCurrentUser = async (): Promise<User | null> => {
             throw new Error('An Unknown error occurred');
         }
         return null;
+    }
+}
+
+export const getAllPosts = async (): Promise<Array<Models.Document>> => {
+    try {
+        const posts = await database.listDocuments(
+            config.databaseID, 
+            config.videosCollectionID
+        );
+        return posts.documents;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error('An Unknown error occurred');
+        }
     }
 }
