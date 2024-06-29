@@ -7,7 +7,10 @@ export interface Post extends Models.Document {
     thumbnail: string;
     prompt: string;
     videourl: string;
-    creator: string;
+    creator: {
+        username: string;
+        avatar: string;
+    };
 }
 
 const useAppwrite = (fn: Function) => {
