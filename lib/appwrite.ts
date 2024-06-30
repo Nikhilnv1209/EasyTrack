@@ -118,3 +118,20 @@ export const getAllPosts = async (): Promise<Array<Models.Document>> => {
         }
     }
 }
+
+export const getLatestPosts = async (): Promise<Array<Models.Document>> => {
+    try {
+        const posts = await database.listDocuments(
+            config.databaseID, 
+            config.videosCollectionID,
+            [Query.orderDesc('$createdAt'), Query.limit(7)]
+        );
+        return posts.documents;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error('An Unknown error occurred');
+        }
+    }
+}
