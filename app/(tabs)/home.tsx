@@ -4,21 +4,21 @@ import {
   FlatList,
   Image,
   RefreshControl,
-  Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import EmptyState from "../../components/EmptyState";
 import useAppwrite, { Post } from "../../lib/useAppwrite";
-import { getAllPosts } from "../../lib/appwrite";
+import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import VideoCard from "../../components/VideoCard";
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { posts, isloading, refetch } = useAppwrite(getAllPosts);
+  const { posts: latestPosts} = useAppwrite(getLatestPosts);
   const onRefresh = async () => {
     setRefreshing(true);
     // refresh data
@@ -32,11 +32,11 @@ const Home = () => {
         keyExtractor={(item) => item.$id.toString()}
         className="px-4"
         renderItem={({ item }) => (
-          <VideoCard post={item}/>
+          <VideoCard post={item} />
         )}
         ListHeaderComponent={() => {
           return (
-            <View className="my-4 space-y-6">
+            <View className="my-6 space-y-6">
               <View className="flex-row items-start justify-between">
                 <View className="space-y-1">
                   <Text className="text-base font-pmedium text-gray-100">
@@ -60,10 +60,10 @@ const Home = () => {
 
               {/* Trending videos component */}
               <View>
-                <Text className="text-lg font-pregular text-gray-100">
+                <Text className="text-lg font-pregular text-gray-200 mb-3">
                   Trending videos
                 </Text>
-                <Trending posts={posts ?? []} />
+                <Trending posts={latestPosts ?? []} />
               </View>
 
             </View>
